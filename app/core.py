@@ -226,9 +226,19 @@ def classify_text(
     device = next(model.parameters()).device
     encoded = {name: value.to(device) for name, value in encoded.items()}
     with torch.no_grad():
+        generated = model.generate(
+            **encoded,
+            max_new_tokens=1,
+            do_sample=False,
+            pad_token_id=tokenizer.eos_token_id,
+        )
         logits = model(**encoded).logits[:, -1, :]
 
     category_ids = [tokenizer.convert_tokens_to_ids(token) for token in CATEGORY_TOKENS.values()]
+    generated_ids = generated[0, encoded["input_ids"].shape[1]:].tolist()
+    for category, token in CATEGORY_TOKENS.items():
+        if tokenizer.convert_tokens_to_ids(token) in generated_ids:
+            return category
     scores = logits[0, category_ids]
     predicted_index = int(torch.argmax(scores).item())
     predicted_token = list(CATEGORY_TOKENS.values())[predicted_index]
