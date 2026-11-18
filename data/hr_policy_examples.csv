@@ -1,0 +1,51 @@
+text,label,split
+"Employees may request paid leave for planned vacations by submitting the leave request at least two weeks before the start date.",Leave Policy,train
+"Sick leave may be used for personal illness or medical appointments, and extended absences require a doctor's note.",Leave Policy,train
+"Part-time employees begin using parental leave when they meet the eligibility period described in the employee handbook.",Leave Policy,train
+"Unused annual leave may be carried into the next calendar year up to a maximum of five working days.",Leave Policy,train
+"Managers must respond to leave requests within five business days and provide a reason if the request is declined.",Leave Policy,train
+"Emergency leave is available for sudden family needs and is recorded through the human resources portal.",Leave Policy,train
+"Bereavement leave provides paid time off for immediate family loss in accordance with local policy.",Leave Policy,train
+"Leave without pay requires approval from both the employee's manager and the HR department.",Leave Policy,train
+"Employees should take rest and recovery leave as required by applicable labor rules and organizational practice.",Leave Policy,validation
+"Annual leave balances are shown in the payroll system and can be reviewed at any time.",Leave Policy,validation
+"Travel meals must be supported by itemized receipts and submitted through the expense claim portal.",Expense Claim,train
+"Employees may claim reimbursed mileage at the published rate for approved business travel.",Expense Claim,train
+"Office supply purchases require prior manager approval before an expense claim is submitted.",Expense Claim,train
+"Hotel and transportation receipts should be uploaded within thirty days of the end of an approved trip.",Expense Claim,train
+"The finance team will review claims for missing receipts, policy limits, and duplicate charges.",Expense Claim,train
+"Mobile data reimbursement is available only for roles that have been formally assigned an approved allowance.",Expense Claim,train
+"Entertainment expenses require a business purpose and names of participating clients or employees.",Expense Claim,train
+"Personal purchases will not be reimbursed and must be separated from business expenses.",Expense Claim,train
+"Cash advances must be reconciled within ten business days after the related trip.",Expense Claim,validation
+"A claim must identify the project code and include the tax invoice for each reimbursable purchase.",Expense Claim,validation
+"Job applicants are interviewed by a panel using role-related questions and consistent scoring criteria.",Recruitment,train
+"Open positions must be approved by HR and the department head before recruitment advertising begins.",Recruitment,train
+"Candidates must disclose conflicts of interest relevant to a hiring decision before the offer stage.",Recruitment,train
+"A verbal job offer must be confirmed in writing and is subject to background checks where permitted.",Recruitment,train
+"Recruiters must keep interview notes factual and free from assumptions unrelated to the role.",Recruitment,train
+"Selection decisions must be based on documented qualifications and established position requirements.",Recruitment,train
+"Hiring managers should submit reference checks before a final employment offer is authorized.",Recruitment,train
+"Every external posting must include the essential duties, location, and application deadline.",Recruitment,train
+"Candidate information must be retained only for the period required by the recruitment policy.",Recruitment,validation
+"Interview feedback should be submitted through the applicant tracking system within two business days.",Recruitment,validation
+"Eligible employees may enroll in medical coverage during the annual benefits selection period.",Employee Benefits,train
+"The employer contributes to a retirement savings plan for employees who meet the vesting schedule.",Employee Benefits,train
+"Dental and vision coverage is available to regular employees and qualifying dependents.",Employee Benefits,train
+"Life insurance benefits become effective on the first day of the month following enrollment.",Employee Benefits,train
+"Employees may use the wellness allowance for approved fitness and preventive health activities.",Employee Benefits,train
+"Benefit deductions appear on the monthly payroll statement and can be reviewed through the employee portal.",Employee Benefits,train
+"The dependent care assistance program reimburses eligible expenses under current tax rules.",Employee Benefits,train
+"An employee who experiences a qualifying life event may update benefit elections within thirty days.",Employee Benefits,train
+"Tuition reimbursement is available for courses that support an employee's development plan.",Employee Benefits,validation
+"The employee assistance program provides confidential counseling and referral resources.",Employee Benefits,validation
+"Employees must treat colleagues with respect and refrain from harassment, bullying, or threats.",Workplace Conduct,train
+"Confidential company and customer information must not be shared outside approved work channels.",Workplace Conduct,train
+"Workplace conflicts should be raised with a manager or human resources representative for early resolution.",Workplace Conduct,train
+"The organization prohibits discrimination based on protected characteristics in employment decisions.",Workplace Conduct,train
+"Employees may report suspected misconduct without retaliation through the ethics reporting channel.",Workplace Conduct,train
+"Alcohol, illegal substances, and possession of prohibited weapons are not allowed in workplace facilities.",Workplace Conduct,train
+"Employees must use company equipment appropriately and comply with acceptable-use and security rules.",Workplace Conduct,train
+"A conflict of interest must be disclosed before an employee participates in a related decision.",Workplace Conduct,train
+"Smoking and vaping are permitted only in locations that have been designated by the site manager.",Workplace Conduct,validation
+"Team members must follow professional communication standards when interacting online or in person.",Workplace Conduct,validation
