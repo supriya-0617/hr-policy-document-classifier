@@ -49,3 +49,78 @@ text,label,split
 "A conflict of interest must be disclosed before an employee participates in a related decision.",Workplace Conduct,train
 "Smoking and vaping are permitted only in locations that have been designated by the site manager.",Workplace Conduct,validation
 "Team members must follow professional communication standards when interacting online or in person.",Workplace Conduct,validation
+"Employees may take paid compassionate leave after notifying their manager and HR of an immediate family emergency.",Leave Policy,train
+"A flexible work arrangement does not reduce an employee's obligation to comply with attendance and leave approval requirements.",Leave Policy,train
+"Maternity and paternity leave requests must include the expected start date and supporting records when required.",Leave Policy,train
+"Medical leave lasting more than a few days should be coordinated with HR to determine applicable documentation.",Leave Policy,train
+"Employees cannot replace a denied leave request with an undeclared absence; the normal approval process still applies.",Leave Policy,train
+"Public holiday work schedules and compensatory leave must follow the terms in the local HR policy.",Leave Policy,train
+"A manager should not discriminate between employees when approving or denying requests for planned annual leave.",Leave Policy,train
+"Leave accrued through a valid employment period remains visible in the employee's personal leave statement.",Leave Policy,train
+"Employees returning from extended medical leave may request a reasonable phased return where operationally possible.",Leave Policy,train
+"Unscheduled absence beyond the reporting period may require HR review before leave is recorded.",Leave Policy,train
+"Employees must apply for jury duty leave through the HR system and provide official summons information.",Leave Policy,train
+"The policy defines when a temporary leave interruption may require an employee to reapply for continued coverage.",Leave Policy,train
+"Employees are entitled to leave without retaliation for approved protected absences covered by the policy.",Leave Policy,validation
+"Holiday leave dates must be coordinated with project staffing and communicated before the schedule closes.",Leave Policy,validation
+"An employee should contact HR promptly if a leave balance appears incorrect or a request has expired.",Leave Policy,validation
+"A mileage claim must state the origin and destination and be linked to an authorized business appointment.",Expense Claim,train
+"International travel claims must convert foreign currency using the exchange rate published for the expense date.",Expense Claim,train
+"The reimbursement system rejects claims that contain duplicate line items or unsupported tax totals.",Expense Claim,train
+"Employees may claim approved internet costs only when the expense category is included in their job arrangement.",Expense Claim,train
+"Taxi expenses for ordinary commuting are not reimbursable unless the trip was approved for a business emergency.",Expense Claim,train
+"A conference registration receipt should show the attendee name, event dates, and itemized payment.",Expense Claim,train
+"Managers cannot approve their own expense claims and must route them to an authorized approver.",Expense Claim,train
+"The finance policy defines a maximum reimbursement amount for local transport between approved client sites.",Expense Claim,train
+"Receipts submitted after the claim deadline require a written exception from the employee's department head.",Expense Claim,train
+"Employees must remove excluded personal items before allocating a shared hotel or meal expense.",Expense Claim,train
+"Lost receipts may be addressed only through the exception process and never by creating a substitute invoice.",Expense Claim,train
+"Expense claims should be submitted in the employee's corporate account to preserve transaction records.",Expense Claim,train
+"Corporate cardholders must separate personal charges immediately and document the reconciliation.",Expense Claim,validation
+"Meal reimbursement during routine local work is not automatic unless the role meets the travel eligibility rule.",Expense Claim,validation
+"A claim for replacement equipment needs the asset details and approval required by the technology policy.",Expense Claim,validation
+"The recruitment team must publish the equal opportunity statement on all external vacancy advertisements.",Recruitment,train
+"A hiring panel should agree evaluation criteria before reviewing applications or interviewing candidates.",Recruitment,train
+"Employment offers must pass compensation review and legal approval before they are sent to the selected candidate.",Recruitment,train
+"Recruitment records can include interview notes only if they are relevant to the role and retained securely.",Recruitment,train
+"Internal applicants should receive the same documented role criteria as external candidates.",Recruitment,train
+"A candidate's salary history must not be used for a decision if it is prohibited by local recruitment law.",Recruitment,train
+"Hiring managers are responsible for removing prohibited personal details from candidate scoring summaries.",Recruitment,train
+"The vacancy approval form must identify the reporting line, required qualifications, and budget owner.",Recruitment,train
+"A search firm is retained only for approved roles and must follow the organization's candidate privacy rules.",Recruitment,train
+"Candidates should be informed if a role requires testing, a license, or regulated pre-employment checks.",Recruitment,train
+"A recruitment decision affecting multiple candidates must retain an auditable rationale for each outcome.",Recruitment,train
+"Unsuccessful applicants can request role-related feedback where the process and local rules permit it.",Recruitment,train
+"Job descriptions should separate essential responsibilities from preferred qualifications before advertising.",Recruitment,validation
+"Recruiters must log all formal candidate communications in the approved applicant tracking system.",Recruitment,validation
+"A proposed hiring exception requires written HR approval and must not bypass the screening criteria.",Recruitment,validation
+"Employees may compare the cost of health plan options during the benefits open enrollment window.",Employee Benefits,train
+"Employer-paid disability coverage provides a portion of salary after the eligibility waiting period.",Employee Benefits,train
+"Benefit plan documents explain exclusions, claim procedures, and the role of the designated provider.",Employee Benefits,train
+"Employees may designate or update plan beneficiaries through the secure benefits administration portal.",Employee Benefits,train
+"Paid time away for volunteering is available as a separate benefit within the approved annual allowance.",Employee Benefits,train
+"Commuter benefits can only be used for documented eligible transport expenses under the plan terms.",Employee Benefits,train
+"Health savings account contributions stop or change in response to a qualifying benefits status event.",Employee Benefits,train
+"The organization may subsidize professional certification fees when they are listed in an approved benefit.",Employee Benefits,train
+"New employees receive a benefits orientation covering enrollment dates and required dependent documents.",Employee Benefits,train
+"Retirement plan distributions are governed by plan rules and are not available for ordinary payroll advances.",Employee Benefits,train
+"Employees with part-time schedules are eligible for benefits only if they meet the published threshold.",Employee Benefits,train
+"The employer communicates changes to premiums, providers, or plan coverage before an enrollment period.",Employee Benefits,train
+"A life event such as marriage or birth permits benefit changes only with evidence and timely notice.",Employee Benefits,validation
+"The wellness portal provides resources for preventive care and tracks benefit participation privately.",Employee Benefits,validation
+"Mental health coverage follows the same claim and provider rules as the applicable medical benefit.",Employee Benefits,validation
+"All employees are required to complete annual workplace conduct and respect-at-work training.",Workplace Conduct,train
+"Managers must not retaliate against anyone who participates in an investigation or good-faith ethics report.",Workplace Conduct,train
+"Threatening messages sent through internal platforms may constitute harassment and should be reported.",Workplace Conduct,train
+"Employees must report gifts that could improperly influence a decision under the company's ethics rules.",Workplace Conduct,train
+"Company systems may be monitored for security, and employees must not use them for unlawful activity.",Workplace Conduct,train
+"A personal relationship that creates direct reporting authority must be disclosed to HR for conflict review.",Workplace Conduct,train
+"Bullying investigations use an impartial process and protect the privacy of participants as far as possible.",Workplace Conduct,train
+"Employees must challenge unsafe instructions and follow reporting procedures for workplace hazards.",Workplace Conduct,train
+"The use of another person's credentials is prohibited and may expose both users to disciplinary action.",Workplace Conduct,train
+"Dress and appearance standards must be applied consistently and accommodate protected or documented needs.",Workplace Conduct,train
+"Remote employees must secure devices and confidential documents in accordance with information-security rules.",Workplace Conduct,train
+"Jokes or repeated unwanted conduct may violate respect policy even if the sender says they were intended as humor.",Workplace Conduct,train
+"A disclosure of harassment should be assessed promptly and handled without unnecessary sharing of facts.",Workplace Conduct,validation
+"Workplace investigations must consider relevant evidence and provide participants with a fair process.",Workplace Conduct,validation
+"Employees may use common areas only for activities that follow safety, conduct, and accessibility standards.",Workplace Conduct,validation

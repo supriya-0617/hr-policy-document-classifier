@@ -60,6 +60,9 @@ def split_hr_dataset(records: Iterable[dict[str, str]]) -> tuple[list[dict[str, 
     validation = [record for record in records if record["split"] == "validation"]
     if not train or not validation:
         raise ValueError("Both train and validation splits are required")
+    train_texts = {record["text"].strip().lower() for record in train}
+    if any(record["text"].strip().lower() in train_texts for record in validation):
+        raise ValueError("Validation text leaks into the training split")
     return train, validation
 
 
@@ -77,6 +80,7 @@ def split_paragraphs(text: str) -> list[str]:
 
 def extend_gpt2_tokenizer(model_name: str = "gpt2"):
     """Load GPT-2 and add all category tokens, resizing token embeddings."""
+    import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
     tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -86,6 +90,18 @@ def extend_gpt2_tokenizer(model_name: str = "gpt2"):
     added = tokenizer.add_special_tokens({"additional_special_tokens": special_tokens})
     model = AutoModelForCausalLM.from_pretrained(model_name)
     model.resize_token_embeddings(len(tokenizer))
+
+    with torch.no_grad():
+        for category, token in CATEGORY_TOKENS.items():
+            token_id = tokenizer.convert_tokens_to_ids(token)
+            seed_words = category.lower().replace("policy", "policy ").split()
+            seed_ids = tokenizer.convert_tokens_to_ids(
+                [piece for word in seed_words for piece in tokenizer.tokenize(word)]
+            )
+            seed_ids = [seed_id for seed_id in seed_ids if seed_id is not None and seed_id >= 0]
+            if seed_ids:
+                embedding = model.get_input_embeddings().weight
+                embedding[token_id].copy_(embedding[seed_ids].mean(dim=0))
 
     for category, token in CATEGORY_TOKENS.items():
         if tokenizer.convert_tokens_to_ids(token) == tokenizer.unk_token_id:
@@ -97,7 +113,7 @@ def extend_gpt2_tokenizer(model_name: str = "gpt2"):
     return tokenizer, model
 
 
-def prepare_training_data(records: Iterable[dict[str, str]], tokenizer, max_length: int = 256):
+def prepare_training_data(records: Iterable[dict[str, str]], tokenizer, max_length: int = 128):
     """Create a masked causal-language-modeling dataset for category prediction."""
     from datasets import Dataset
 
@@ -106,8 +122,8 @@ def prepare_training_data(records: Iterable[dict[str, str]], tokenizer, max_leng
         text = record["text"].strip()
         label = record["label"].strip()
         token = CATEGORY_TOKENS[label]
-        prompt = f"HR Policy Text:\n{text}\nCategory:"
-        full_text = f"{prompt}{token}"
+        prompt = f"Task: classify the HR policy paragraph.\nParagraph: {text}\nCategory:"
+        full_text = f"{prompt} {token}"
         encoded = tokenizer(
             full_text,
             truncation=True,
@@ -139,8 +155,11 @@ def prepare_training_data(records: Iterable[dict[str, str]], tokenizer, max_leng
 def train_hr_classifier(
     output_dir: str | Path = DEFAULT_MODEL_DIR,
     model_name: str = "gpt2",
-    epochs: float = 3.0,
-    batch_size: int = 2,
+    epochs: float = 20.0,
+    batch_size: int = 4,
+    learning_rate: float = 1e-3,
+    weight_decay: float = 0.01,
+    warmup_ratio: float = 0.05,
 ) -> dict:
     """Fine-tune GPT-2 with the Hugging Face Trainer class."""
     if Trainer is None or TrainingArguments is None:
@@ -152,6 +171,10 @@ def train_hr_classifier(
     train_dataset = prepare_training_data(train_records, tokenizer)
     validation_dataset = prepare_training_data(validation_records, tokenizer)
 
+    for parameter in model.parameters():
+        parameter.requires_grad = False
+    model.get_input_embeddings().weight.requires_grad = True
+
     random.seed(42)
     os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
     output_path = Path(output_dir)
@@ -161,12 +184,18 @@ def train_hr_classifier(
         num_train_epochs=epochs,
         per_device_train_batch_size=batch_size,
         per_device_eval_batch_size=batch_size,
-        learning_rate=5e-5,
-        weight_decay=0.01,
-        warmup_ratio=0.1,
+        learning_rate=learning_rate,
+        weight_decay=weight_decay,
+        warmup_ratio=warmup_ratio,
+        gradient_accumulation_steps=2,
+        label_smoothing_factor=0.0,
         logging_steps=10,
         eval_strategy="epoch",
         save_strategy="epoch",
+        load_best_model_at_end=True,
+        metric_for_best_model="eval_loss",
+        greater_is_better=False,
+        save_total_limit=2,
         seed=42,
         report_to=[],
         remove_unused_columns=True,
@@ -221,30 +250,28 @@ def classify_text(
 
     import torch
 
-    prompt = f"HR Policy Text:\n{text.strip()}\nCategory:"
-    encoded = tokenizer(prompt, return_tensors="pt")
+    prompt = f"Task: classify the HR policy paragraph.\nParagraph: {text.strip()}\nCategory:"
+    encoded = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=128)
     device = next(model.parameters()).device
     encoded = {name: value.to(device) for name, value in encoded.items()}
     with torch.no_grad():
+        category_ids = [
+            tokenizer.convert_tokens_to_ids(token)
+            for token in CATEGORY_TOKENS.values()
+        ]
         generated = model.generate(
             **encoded,
             max_new_tokens=1,
             do_sample=False,
             pad_token_id=tokenizer.eos_token_id,
+            prefix_allowed_tokens_fn=lambda _batch_id, _input_ids: category_ids,
         )
-        logits = model(**encoded).logits[:, -1, :]
 
-    category_ids = [tokenizer.convert_tokens_to_ids(token) for token in CATEGORY_TOKENS.values()]
     generated_ids = generated[0, encoded["input_ids"].shape[1]:].tolist()
     for category, token in CATEGORY_TOKENS.items():
         if tokenizer.convert_tokens_to_ids(token) in generated_ids:
             return category
-    scores = logits[0, category_ids]
-    predicted_index = int(torch.argmax(scores).item())
-    predicted_token = list(CATEGORY_TOKENS.values())[predicted_index]
-    if category_ids[predicted_index] >= model.get_input_embeddings().weight.shape[0]:
-        raise RuntimeError("Predicted category token is outside the model vocabulary")
-    return next(category for category, token in CATEGORY_TOKENS.items() if token == predicted_token)
+    raise RuntimeError("GPT-2 generated no recognized HR category token")
 
 
 def classify_paragraphs(
@@ -280,7 +307,7 @@ def milestone_2(model_name: str = "gpt2"):
 
 
 def milestone_3(output_dir: str | Path = DEFAULT_MODEL_DIR, model_name: str = "gpt2"):
-    return train_hr_classifier(output_dir, model_name, epochs=3.0)
+    return train_hr_classifier(output_dir, model_name)
 
 
 def milestone_4(text: str, tokenizer=None, model=None, model_dir: str | Path = DEFAULT_MODEL_DIR) -> str:

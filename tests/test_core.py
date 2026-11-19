@@ -10,14 +10,14 @@ from app import core
 def test_milestone_1_dataset_is_complete_and_labelled():
     records = core.load_hr_dataset()
     train, validation = core.split_hr_dataset(records)
-    assert len(records) == 50
-    assert len(train) == 40
-    assert len(validation) == 10
+    assert len(records) == 125
+    assert len(train) == 100
+    assert len(validation) == 25
     assert set(record["label"] for record in records) == set(core.CATEGORIES)
     assert all(record["text"].strip() for record in records)
     for category in core.CATEGORIES:
-        assert sum(record["label"] == category for record in train) == 8
-        assert sum(record["label"] == category for record in validation) == 2
+        assert sum(record["label"] == category for record in train) == 20
+        assert sum(record["label"] == category for record in validation) == 5
 
 
 def test_milestone_2_category_tokens_are_unique_and_complete():
@@ -59,7 +59,16 @@ def test_milestone_3_trainer_configuration_is_used(monkeypatch):
             observed["saved"] = path
 
     class MockModel:
-        pass
+        def parameters(self):
+            return []
+
+        class Embeddings:
+            class Weight:
+                requires_grad = False
+            weight = Weight()
+
+        def get_input_embeddings(self):
+            return self.Embeddings()
 
     class MockTrainer:
         def __init__(self, **kwargs):
@@ -74,7 +83,7 @@ def test_milestone_3_trainer_configuration_is_used(monkeypatch):
         def save_model(self, path):
             observed["model"] = path
 
-    monkeypatch.setattr(core, "split_hr_dataset", lambda records: (records[:40], records[40:]))
+    monkeypatch.setattr(core, "split_hr_dataset", lambda records: (records[:100], records[100:]))
     monkeypatch.setattr(core, "extend_gpt2_tokenizer", lambda model_name: (MockTokenizer(), MockModel()))
     monkeypatch.setattr(core, "prepare_training_data", lambda records, tokenizer: records)
 
@@ -85,8 +94,8 @@ def test_milestone_3_trainer_configuration_is_used(monkeypatch):
     monkeypatch.setattr(core, "Trainer", MockTrainer)
     monkeypatch.setattr(core, "TrainingArguments", MockArgs)
     result = core.train_hr_classifier("/tmp/hr-gpt2-test")
-    assert result["train_examples"] == 40
-    assert result["validation_examples"] == 10
+    assert result["train_examples"] == 100
+    assert result["validation_examples"] == 25
     assert observed["args"]["eval_strategy"] == "epoch"
     assert observed["trainer"]["train_dataset"] is not None
 
@@ -97,6 +106,30 @@ def test_milestone_4_invalid_and_paragraph_inputs():
     assert core.split_paragraphs("") == []
     assert core.split_paragraphs("First section.\n\nSecond section.") == ["First section.", "Second section."]
     assert core.split_paragraphs("One line\nSecond line") == ["One line", "Second line"]
+
+
+def test_inference_decodes_generated_hr_token():
+    import torch
+
+    class MockTokenizer:
+        eos_token_id = 0
+
+        def __call__(self, text, **kwargs):
+            return {"input_ids": torch.tensor([[1, 2]]), "attention_mask": torch.tensor([[1, 1]])}
+
+        def convert_tokens_to_ids(self, token):
+            return list(core.CATEGORY_TOKENS.values()).index(token) + 10
+
+    class MockModel:
+        def parameters(self):
+            return iter([torch.nn.Parameter(torch.zeros(1))])
+
+        def generate(self, input_ids, prefix_allowed_tokens_fn, **kwargs):
+            allowed = prefix_allowed_tokens_fn(0, input_ids[0])
+            assert allowed == list(range(10, 15))
+            return torch.tensor([[1, 2, 12]])
+
+    assert core.classify_text("A never-seen policy paragraph.", MockTokenizer(), MockModel()) == "Recruitment"
 
 
 def test_milestone_5_paragraph_processing(monkeypatch):

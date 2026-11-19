@@ -1,28 +1,42 @@
 {
-  "accuracy": 0.2,
+  "accuracy": 0.84,
   "baseline_category": "Leave Policy",
   "baseline_accuracy": 0.2,
-  "validation_examples": 10,
+  "validation_examples": 25,
+  "training": {
+    "base_model": "gpt2",
+    "train_examples": 100,
+    "epochs": 20,
+    "per_device_batch_size": 4,
+    "gradient_accumulation_steps": 2,
+    "learning_rate": 0.001,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.05,
+    "max_sequence_length": 128,
+    "seed": 42,
+    "checkpoint_selection": "lowest validation loss"
+  },
+  "historical_baseline_accuracy": 0.2,
   "predictions": [
     {
       "text": "Employees should take rest and recovery leave as required by applicable labor rules and organizational practice.",
       "expected": "Leave Policy",
-      "predicted": "Recruitment"
+      "predicted": "Leave Policy"
     },
     {
       "text": "Annual leave balances are shown in the payroll system and can be reviewed at any time.",
       "expected": "Leave Policy",
-      "predicted": "Recruitment"
+      "predicted": "Employee Benefits"
     },
     {
       "text": "Cash advances must be reconciled within ten business days after the related trip.",
       "expected": "Expense Claim",
-      "predicted": "Recruitment"
+      "predicted": "Expense Claim"
     },
     {
       "text": "A claim must identify the project code and include the tax invoice for each reimbursable purchase.",
       "expected": "Expense Claim",
-      "predicted": "Recruitment"
+      "predicted": "Expense Claim"
     },
     {
       "text": "Candidate information must be retained only for the period required by the recruitment policy.",
@@ -32,27 +46,181 @@
     {
       "text": "Interview feedback should be submitted through the applicant tracking system within two business days.",
       "expected": "Recruitment",
-      "predicted": "Recruitment"
+      "predicted": "Leave Policy"
     },
     {
       "text": "Tuition reimbursement is available for courses that support an employee's development plan.",
       "expected": "Employee Benefits",
-      "predicted": "Recruitment"
+      "predicted": "Employee Benefits"
     },
     {
       "text": "The employee assistance program provides confidential counseling and referral resources.",
       "expected": "Employee Benefits",
-      "predicted": "Recruitment"
+      "predicted": "Employee Benefits"
     },
     {
       "text": "Smoking and vaping are permitted only in locations that have been designated by the site manager.",
       "expected": "Workplace Conduct",
-      "predicted": "Recruitment"
+      "predicted": "Workplace Conduct"
     },
     {
       "text": "Team members must follow professional communication standards when interacting online or in person.",
       "expected": "Workplace Conduct",
+      "predicted": "Workplace Conduct"
+    },
+    {
+      "text": "Employees are entitled to leave without retaliation for approved protected absences covered by the policy.",
+      "expected": "Leave Policy",
+      "predicted": "Leave Policy"
+    },
+    {
+      "text": "Holiday leave dates must be coordinated with project staffing and communicated before the schedule closes.",
+      "expected": "Leave Policy",
+      "predicted": "Leave Policy"
+    },
+    {
+      "text": "An employee should contact HR promptly if a leave balance appears incorrect or a request has expired.",
+      "expected": "Leave Policy",
+      "predicted": "Leave Policy"
+    },
+    {
+      "text": "Corporate cardholders must separate personal charges immediately and document the reconciliation.",
+      "expected": "Expense Claim",
+      "predicted": "Employee Benefits"
+    },
+    {
+      "text": "Meal reimbursement during routine local work is not automatic unless the role meets the travel eligibility rule.",
+      "expected": "Expense Claim",
+      "predicted": "Employee Benefits"
+    },
+    {
+      "text": "A claim for replacement equipment needs the asset details and approval required by the technology policy.",
+      "expected": "Expense Claim",
+      "predicted": "Expense Claim"
+    },
+    {
+      "text": "Job descriptions should separate essential responsibilities from preferred qualifications before advertising.",
+      "expected": "Recruitment",
       "predicted": "Recruitment"
+    },
+    {
+      "text": "Recruiters must log all formal candidate communications in the approved applicant tracking system.",
+      "expected": "Recruitment",
+      "predicted": "Recruitment"
+    },
+    {
+      "text": "A proposed hiring exception requires written HR approval and must not bypass the screening criteria.",
+      "expected": "Recruitment",
+      "predicted": "Recruitment"
+    },
+    {
+      "text": "A life event such as marriage or birth permits benefit changes only with evidence and timely notice.",
+      "expected": "Employee Benefits",
+      "predicted": "Employee Benefits"
+    },
+    {
+      "text": "The wellness portal provides resources for preventive care and tracks benefit participation privately.",
+      "expected": "Employee Benefits",
+      "predicted": "Employee Benefits"
+    },
+    {
+      "text": "Mental health coverage follows the same claim and provider rules as the applicable medical benefit.",
+      "expected": "Employee Benefits",
+      "predicted": "Employee Benefits"
+    },
+    {
+      "text": "A disclosure of harassment should be assessed promptly and handled without unnecessary sharing of facts.",
+      "expected": "Workplace Conduct",
+      "predicted": "Workplace Conduct"
+    },
+    {
+      "text": "Workplace investigations must consider relevant evidence and provide participants with a fair process.",
+      "expected": "Workplace Conduct",
+      "predicted": "Workplace Conduct"
+    },
+    {
+      "text": "Employees may use common areas only for activities that follow safety, conduct, and accessibility standards.",
+      "expected": "Workplace Conduct",
+      "predicted": "Workplace Conduct"
     }
-  ]
+  ],
+  "macro_f1": 0.8416239316239317,
+  "category_metrics": {
+    "Leave Policy": {
+      "precision": 0.8,
+      "recall": 0.8,
+      "f1": 0.8,
+      "support": 5
+    },
+    "Expense Claim": {
+      "precision": 1.0,
+      "recall": 0.6,
+      "f1": 0.75,
+      "support": 5
+    },
+    "Recruitment": {
+      "precision": 1.0,
+      "recall": 0.8,
+      "f1": 0.8888888888888888,
+      "support": 5
+    },
+    "Employee Benefits": {
+      "precision": 0.625,
+      "recall": 1.0,
+      "f1": 0.7692307692307693,
+      "support": 5
+    },
+    "Workplace Conduct": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 5
+    }
+  },
+  "confusion_matrix": {
+    "labels": [
+      "Leave Policy",
+      "Expense Claim",
+      "Recruitment",
+      "Employee Benefits",
+      "Workplace Conduct"
+    ],
+    "matrix": [
+      [
+        4,
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        3,
+        0,
+        2,
+        0
+      ],
+      [
+        1,
+        0,
+        4,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        5,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        5
+      ]
+    ]
+  }
 }
